@@ -3,6 +3,7 @@ package com.yan.wang.sprin.mvc;
 import com.yan.wang.sprin.mvc.dao.Customer;
 import com.yan.wang.sprin.mvc.dao.CustomerVoucher;
 import com.yan.wang.sprin.mvc.dao.Voucher;
+import com.yan.wang.sprin.mvc.dao.VoucherToReturn;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -90,9 +91,13 @@ public class HelloController {
 
 
 	@RequestMapping(value = "tab", params = {"email", "company"}, method = {RequestMethod.POST, RequestMethod.GET})
-	public @ResponseBody void tab(@RequestParam(value = "email") String email, @RequestParam(value = "company") String company_name) {
+	public @ResponseBody VoucherToReturn tab(@RequestParam(value = "email") String email, @RequestParam(value = "company") String company_name) {
+		VoucherToReturn voucherToReturn = new VoucherToReturn();
+
 		int newCustomerId = 0;
 		int newCVId = 0;
+		String voucherText = "";
+
 		try {
 			Class.forName("org.hsqldb.jdbc.JDBCDriver" );
 			Connection c = DriverManager.getConnection("jdbc:hsqldb:hsql://localhost", "SA", "");
@@ -119,7 +124,13 @@ public class HelloController {
 			resultSet = statement.executeQuery("select min(voucher_id) from voucher where flag = '0' and company_name = '"+ company_name +"'");
 			while (resultSet.next()) {
 				int minID = resultSet.getInt(meta.getColumnName(1));
-				statement.executeQuery("update voucher set flag = '1' where voucher_id = '"+ minID  +"'");
+				resultSet = statement.executeQuery("select voucher_text from voucher where voucher_id = '"+ minID  +"'");
+				while (resultSet.next()) {
+					voucherText = resultSet.getString("voucher_text");
+					System.out.println(voucherText);
+				}
+
+				statement.executeQuery("update voucher set flag = '1' where voucher_id = '" + minID  +"'");
 
 
 				resultSet = statement.executeQuery("select max(id) from customer_voucher");
@@ -135,11 +146,14 @@ public class HelloController {
 				statement.executeQuery("insert into customer_voucher values('"+newCVId+"', '"+newCustomerId+"', '"+minID+"')");
 			}
 
+			voucherToReturn.setEmail(email);
+			voucherToReturn.setCompanyName(company_name);
+			voucherToReturn.setVoucherText(voucherText);
 
 		} catch (Exception e) {
 			System.err.println("ERROR: failed to load HSQLDB JDBC driver.");
 			e.printStackTrace();
 		}
-		//return null;
+		return voucherToReturn;
 	}
 }

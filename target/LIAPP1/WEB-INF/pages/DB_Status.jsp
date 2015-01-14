@@ -5,7 +5,9 @@
 <html>
 <body>
 	<h1>${message}</h1>
-
+	<br/>
+	<a href="/">back</a>
+	<br/>
 	<table border="1px">
 		<tr>
 			<td align="center">
