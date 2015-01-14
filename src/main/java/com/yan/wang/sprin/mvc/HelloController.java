@@ -1,11 +1,14 @@
 package com.yan.wang.sprin.mvc;
 
+import com.yan.wang.sprin.mvc.dao.Customer;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/")
@@ -31,14 +34,26 @@ public class HelloController {
 			resultSet = statement.executeQuery("select * from customer");
 
 			ResultSetMetaData meta   = resultSet.getMetaData();
+			/*
+			String[] columnsNames = new String[meta.getColumnCount()];
 			System.out.println(meta.getColumnCount());
-			System.out.println(meta.getColumnName(1));
-			System.out.println(meta.getColumnName(2));
+			for (int i = 1; i <= columnsNames.length; i++) {
+				columnsNames[i-1] = meta.getColumnName(i);
+				System.out.println(columnsNames[i-1]);
+			}
+			*/
+
+			List<Customer> customerList = new ArrayList<Customer>();
 
 			while (resultSet.next()) {
-				System.out.println(resultSet.getInt(meta.getColumnName(1)));
-				System.out.println(resultSet.getString(meta.getColumnName(2)));
+				Customer customer = new Customer();
+				customer.setCustomer_id(resultSet.getInt(meta.getColumnName(1)));
+				customer.setEmail(resultSet.getString(meta.getColumnName(2)));
+				customerList.add(customer);
 			}
+
+			model.addAttribute("customerList", customerList);
+
 
 //			resultSet = statement.executeQuery("select * from voucher");
 
@@ -49,19 +64,10 @@ public class HelloController {
 			System.err.println("ERROR: failed to load HSQLDB JDBC driver.");
 			e.printStackTrace();
 		}
+
+
+
 		return "DB_Status";
 	}
 
-
-	// http://rajadileepkolli.wordpress.com/2011/12/23/hsqldb-in-ubuntu/
-
-	// Recent settings
-	// HSQL Database Engine Server
-	// org.hsqldb.jdbcDriver
-	// jdbc:hsqldb:hsql://localhost/
-
-	// cd MyStuff/Progs/hsqldb-2.3.2/hsqldb/
-	// java -cp ./lib/hsqldb.jar org.hsqldb.server.Server
-	// java -cp ./lib/hsqldb.jar org.hsqldb.util.DatabaseManagerSwing
-	// insert into customer values ('2', 'yan.wang.geneva@gmail.com');
 }

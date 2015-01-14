@@ -1,0 +1,10 @@
+http://rajadileepkolli.wordpress.com/2011/12/23/hsqldb-in-ubuntu/
+
+Recent settings
+HSQL Database Engine Server
+org.hsqldb.jdbcDriver
+jdbc:hsqldb:hsql://localhost/
+
+cd MyStuff/Progs/hsqldb-2.3.2/hsqldb/
+java -cp ./lib/hsqldb.jar org.hsqldb.server.Server
+java -cp ./lib/hsqldb.jar org.hsqldb.util.DatabaseManagerSwing
