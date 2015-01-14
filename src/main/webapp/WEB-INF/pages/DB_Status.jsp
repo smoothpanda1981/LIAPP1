@@ -36,12 +36,16 @@
 			<td align="center">
 				COMPANY_NAME
 			</td>
+			<td align="center">
+				FLAG
+			</td>
 		</tr>
 		<c:forEach items="${voucherList}" var="voucher">
 			<tr>
 				<td align="center"><c:out value="${voucher.voucher_id}"/></td>
 				<td align="center"><c:out value="${voucher.voucher_text}"/></td>
 				<td align="center"><c:out value="${voucher.company_name}"/></td>
+				<td align="center"><c:out value="${voucher.flag}"/></td>
 			</tr>
 		</c:forEach>
 	</table>

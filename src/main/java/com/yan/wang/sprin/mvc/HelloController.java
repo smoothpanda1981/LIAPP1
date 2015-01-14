@@ -7,6 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -22,7 +24,7 @@ public class HelloController {
 	}
 
 	@RequestMapping(value = "db", method = RequestMethod.GET)
-	public String page1(ModelMap model) {
+	public String db(ModelMap model) {
 		model.addAttribute("message", "DB Status");
 
 		try {
@@ -61,6 +63,7 @@ public class HelloController {
 				voucher.setVoucher_id(resultSet.getInt(meta.getColumnName(1)));
 				voucher.setVoucher_text(resultSet.getString(meta.getColumnName(2)));
 				voucher.setCompany_name(resultSet.getString(meta.getColumnName(3)));
+				voucher.setFlag(resultSet.getInt(meta.getColumnName(4)));
 				voucherList.add(voucher);
 			}
 			model.addAttribute("voucherList", voucherList);
@@ -85,4 +88,58 @@ public class HelloController {
 		return "DB_Status";
 	}
 
+
+	@RequestMapping(value = "tab", method = {RequestMethod.POST, RequestMethod.GET})
+	public @ResponseBody void tab(@RequestParam("email") String email) {
+		int newCustomerId = 0;
+		int newCVId = 0;
+		try {
+			Class.forName("org.hsqldb.jdbc.JDBCDriver" );
+			Connection c = DriverManager.getConnection("jdbc:hsqldb:hsql://localhost", "SA", "");
+			System.out.println("Schema = " + c.getSchema());
+
+			Statement statement = c.createStatement();
+			ResultSet resultSet;
+
+			resultSet = statement.executeQuery("select max(customer_id) from customer");
+			ResultSetMetaData meta   = resultSet.getMetaData();
+
+			while (resultSet.next()) {
+				int maxID = resultSet.getInt(meta.getColumnName(1));
+				int newID = maxID + 1;
+				System.out.println(maxID + 1);
+				resultSet = statement.executeQuery("insert into customer values ('" + newID + "' , '" + email + "')");
+			}
+
+			resultSet = statement.executeQuery("select max(customer_id) from customer");
+			while (resultSet.next()) {
+				newCustomerId = resultSet.getInt(meta.getColumnName(1));
+			}
+
+			resultSet = statement.executeQuery("select min(voucher_id) from voucher where flag = '0'");
+			while (resultSet.next()) {
+				int minID = resultSet.getInt(meta.getColumnName(1));
+				statement.executeQuery("update voucher set flag = '1' where voucher_id = '"+ minID  +"'");
+
+
+				resultSet = statement.executeQuery("select max(id) from customer_voucher");
+				meta   = resultSet.getMetaData();
+
+				int cvMaxID = 0;
+				while (resultSet.next()) {
+					cvMaxID = resultSet.getInt(meta.getColumnName(1));
+					newCVId = cvMaxID + 1;
+					System.out.println(newCVId);
+				}
+
+				statement.executeQuery("insert into customer_voucher values('"+newCVId+"', '"+newCustomerId+"', '"+minID+"')");
+			}
+
+
+		} catch (Exception e) {
+			System.err.println("ERROR: failed to load HSQLDB JDBC driver.");
+			e.printStackTrace();
+		}
+		//return null;
+	}
 }

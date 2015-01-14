@@ -9,6 +9,7 @@ public class Voucher implements Serializable {
     private int voucher_id;
     private String voucher_text;
     private String company_name;
+    private int flag;
 
     public int getVoucher_id() {
         return voucher_id;
@@ -32,5 +33,13 @@ public class Voucher implements Serializable {
 
     public void setCompany_name(String company_name) {
         this.company_name = company_name;
+    }
+
+    public int getFlag() {
+        return flag;
+    }
+
+    public void setFlag(int flag) {
+        this.flag = flag;
     }
 }

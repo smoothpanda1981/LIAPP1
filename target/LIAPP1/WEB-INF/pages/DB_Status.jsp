@@ -7,22 +7,70 @@
 	<h1>${message}</h1>
 
 	<table border="1px">
-		<th>
-			<td>
+		<tr>
+			<td align="center">
 				CUSTOMER_ID
 			</td>
-
-		</th>
-		<th>
-			<td>
+			<td align="center">
 				EMAIL
 			</td>
 
-		</th>
+		</tr>
+		<c:forEach items="${customerList}" var="customer">
+			<tr>
+				<td align="center"><c:out value="${customer.customer_id}"/></td>
+				<td align="center"><c:out value="${customer.email}"/></td>
+			</tr>
+		</c:forEach>
 	</table>
-	<c:forEach items="${customerList}" var="customer">
-		<c:out value="${customer.customer_id}"/>
-		<c:out value="${customer.email}"/>
-	</c:forEach>
+	<br/><br/>
+
+	<table border="1px">
+		<tr>
+			<td align="center">
+				VOUCHER_ID
+			</td>
+			<td align="center">
+				VOUCHER_TEXT
+			</td>
+			<td align="center">
+				COMPANY_NAME
+			</td>
+			<td align="center">
+				FLAG
+			</td>
+		</tr>
+		<c:forEach items="${voucherList}" var="voucher">
+			<tr>
+				<td align="center"><c:out value="${voucher.voucher_id}"/></td>
+				<td align="center"><c:out value="${voucher.voucher_text}"/></td>
+				<td align="center"><c:out value="${voucher.company_name}"/></td>
+				<td align="center"><c:out value="${voucher.flag}"/></td>
+			</tr>
+		</c:forEach>
+	</table>
+	<br/><br/>
+
+	<table border="1px">
+		<tr>
+			<td align="center">
+				ID
+			</td>
+			<td align="center">
+				CUSTOMER_ID
+			</td>
+			<td align="center">
+				VOUCHER_ID
+			</td>
+		</tr>
+		<c:forEach items="${customerVoucherList}" var="customerVoucher">
+			<tr>
+				<td align="center"><c:out value="${customerVoucher.id}"/></td>
+				<td align="center"><c:out value="${customerVoucher.customer_id}"/></td>
+				<td align="center"><c:out value="${customerVoucher.voucher_id}"/></td>
+			</tr>
+		</c:forEach>
+	</table>
+	<br/><br/>
 </body>
 </html>
