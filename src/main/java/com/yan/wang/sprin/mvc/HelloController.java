@@ -29,13 +29,20 @@ public class HelloController {
 			ResultSet resultSet;
 
 			resultSet = statement.executeQuery("select * from customer");
-			dump(resultSet);
 
-			resultSet = statement.executeQuery("select * from voucher");
-			dump(resultSet);
+			ResultSetMetaData meta   = resultSet.getMetaData();
+			System.out.println(meta.getColumnCount());
+			System.out.println(meta.getColumnName(1));
+			System.out.println(meta.getColumnName(2));
 
-			resultSet = statement.executeQuery("select * from customer_voucher");
-			dump(resultSet);
+			while (resultSet.next()) {
+				System.out.println(resultSet.getInt(meta.getColumnName(1)));
+				System.out.println(resultSet.getString(meta.getColumnName(2)));
+			}
+
+//			resultSet = statement.executeQuery("select * from voucher");
+
+//			resultSet = statement.executeQuery("select * from customer_voucher");
 
 
 		} catch (Exception e) {
@@ -53,35 +60,8 @@ public class HelloController {
 	// org.hsqldb.jdbcDriver
 	// jdbc:hsqldb:hsql://localhost/
 
+	// cd MyStuff/Progs/hsqldb-2.3.2/hsqldb/
 	// java -cp ./lib/hsqldb.jar org.hsqldb.server.Server
 	// java -cp ./lib/hsqldb.jar org.hsqldb.util.DatabaseManagerSwing
-
-
-
-	public void dump(ResultSet rs) throws SQLException {
-
-		// the order of the rows in a cursor
-		// are implementation dependent unless you use the SQL ORDER statement
-		ResultSetMetaData meta   = rs.getMetaData();
-		int               colmax = meta.getColumnCount();
-		int               i;
-		Object            o = null;
-
-		// the result set is a cursor into the data.  You can only
-		// point to one row at a time
-		// assume we are pointing to BEFORE the first row
-		// rs.next() points to next row and returns true
-		// or false if there is no next row, which breaks the loop
-		System.out.println("___________________________________________________");
-		for (; rs.next(); ) {
-			for (i = 0; i < colmax; ++i) {
-				o = rs.getObject(i + 1);    // Is SQL the first column is indexed
-
-				// with 1 not 0
-				System.out.print(o.toString() + " ");
-			}
-
-			System.out.println(" ");
-		}
-	}
+	// insert into customer values ('2', 'yan.wang.geneva@gmail.com');
 }
