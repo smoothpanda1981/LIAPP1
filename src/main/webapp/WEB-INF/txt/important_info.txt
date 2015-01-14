@@ -10,3 +10,6 @@ jdbc:hsqldb:hsql://localhost/
 cd MyStuff/Progs/hsqldb-2.3.2/hsqldb/
 java -cp ./lib/hsqldb.jar org.hsqldb.server.Server
 java -cp ./lib/hsqldb.jar org.hsqldb.util.DatabaseManagerSwing
+
+http://localhost:8080/db
+http://localhost:8080/tab?email=yan.wang.ge@gmail.com&company=Tim%20Horton

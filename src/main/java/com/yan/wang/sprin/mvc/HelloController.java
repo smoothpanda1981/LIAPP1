@@ -19,7 +19,7 @@ import java.util.List;
 public class HelloController {
 	@RequestMapping(method = RequestMethod.GET)
 	public String printWelcome(ModelMap model) {
-		model.addAttribute("message", "Hello world!");
+		model.addAttribute("message", "Hello Doug !");
 		return "hello";
 	}
 
@@ -89,8 +89,8 @@ public class HelloController {
 	}
 
 
-	@RequestMapping(value = "tab", method = {RequestMethod.POST, RequestMethod.GET})
-	public @ResponseBody void tab(@RequestParam("email") String email) {
+	@RequestMapping(value = "tab", params = {"email", "company"}, method = {RequestMethod.POST, RequestMethod.GET})
+	public @ResponseBody void tab(@RequestParam(value = "email") String email, @RequestParam(value = "company") String company_name) {
 		int newCustomerId = 0;
 		int newCVId = 0;
 		try {
@@ -116,7 +116,7 @@ public class HelloController {
 				newCustomerId = resultSet.getInt(meta.getColumnName(1));
 			}
 
-			resultSet = statement.executeQuery("select min(voucher_id) from voucher where flag = '0'");
+			resultSet = statement.executeQuery("select min(voucher_id) from voucher where flag = '0' and company_name = '"+ company_name +"'");
 			while (resultSet.next()) {
 				int minID = resultSet.getInt(meta.getColumnName(1));
 				statement.executeQuery("update voucher set flag = '1' where voucher_id = '"+ minID  +"'");
