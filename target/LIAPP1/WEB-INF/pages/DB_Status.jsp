@@ -7,6 +7,8 @@
 	<h1>${message}</h1>
 	<br/>
 	<a href="/">back</a>
+	<br/><br/>
+	<a href="add/customer">Add Customer</a>
 	<br/>
 	<table border="1px">
 		<tr>
@@ -26,7 +28,8 @@
 		</c:forEach>
 	</table>
 	<br/><br/>
-
+	<a href="add/voucher">Add Voucher</a>
+	<br/>
 	<table border="1px">
 		<tr>
 			<td align="center">
@@ -52,7 +55,8 @@
 		</c:forEach>
 	</table>
 	<br/><br/>
-
+	<a href="add/cv">Add Customer_Voucher</a>
+	<br/>
 	<table border="1px">
 		<tr>
 			<td align="center">
