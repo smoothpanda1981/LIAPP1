@@ -17,7 +17,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/add")
-public class AddController {
+public class CustomerController {
 
 	@RequestMapping(method = RequestMethod.GET)
 	public String printWelcome(ModelMap model) {
