@@ -45,4 +45,25 @@ public class CustomerController {
 
 
 	}
+
+	@RequestMapping(value = "{thing}" , method = RequestMethod.GET)
+	public String showCustomerForm(@PathVariable String thing, @ModelAttribute("customerForm") Customer customer, Model model) {
+
+		//modelMap.addAttribute("message", "Add customer !");
+		//modelMap.put("customerForm", new Customer());
+		model.addAttribute("message", "Customer Added !");
+		model.addAttribute("customerForm", customer);
+
+
+		if (thing.equals("customer")) {
+			return "addCustomer";
+			//return new ModelAndView("addCustomer", "command", new Customer());
+		} else {
+			return "hello";
+			//return new ModelAndView("hello", "command", new Customer());
+		}
+
+
+
+	}
 }
